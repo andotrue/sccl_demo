@@ -1,0 +1,122 @@
+<script language='php'>
+
+define('CSV_LINE_LIMIT', 1024);
+
+class Form {
+
+  function IsSelected($candidate, $selection) {
+    if (!strlen($candidate)) return FALSE;
+    if (!isset($selection)) return FALSE;
+    if (is_array($selection)) {
+      foreach ($selection as $val) {
+	if ($candidate == $val) return TRUE;
+      }
+      return FALSE;
+    } else {
+      return ($candidate == $selection);
+    }
+  }
+
+  function PrintRadioItem($key, $value, $selection) {
+    printf('<input type="radio" name="%s" value="%s"%s>',
+	$key, $value, (Form::IsSelected($value, $selection)) ? ' checked' : '');
+  }
+
+  function PrintCheckboxItem($key, $value, $selection) {
+    printf('<input type="checkbox" name="%s[]" value="%s"%s>',
+	$key, $value, (Form::IsSelected($value, $selection)) ? ' checked' : '');
+  }
+
+  function PrintSelectItemWithCSV($key, $csvfile, $size, $multiple, $selection) {
+    $encoding = mb_internal_encoding();
+    if (strlen($multiple)) {
+      printf('<select name="%s[]" size="%d" multiple>', $key, $size);
+    } else {
+      printf('<select name="%s" size="%d">', $key, $size);
+      print('<option value=""></option>');
+    }
+    if (($fp = fopen($csvfile, 'r', 1))) {
+      while (($a = fgetcsv($fp, CSV_LINE_LIMIT, ','))) {
+	$a[0] = trim($a[0]);#mb_convert_encoding(trim($a[0]), $encoding, 'auto');
+	$a[1] = trim($a[1]);#mb_convert_encoding(trim($a[1]), $encoding, 'auto');
+	printf('<option value="%s"%s>%s</option>', htmlspecialchars($a[0], ENT_QUOTES), (Form::IsSelected($a[0], $selection)) ? ' selected' : '', htmlspecialchars($a[1], ENT_QUOTES));
+      }
+      fclose($fp);
+    }
+    print('</select>');
+  }
+
+  function ValueForKeyWithCSV($csvfile, $selection) {
+    if (!strlen($selection)) return NULL;
+    #$encoding = mb_internal_encoding();
+    if (($fp = fopen($csvfile, 'r', 1))) {
+      while (($a = fgetcsv($fp, CSV_LINE_LIMIT, ','))) {
+	if (trim($a[0]) == $selection) {#mb_convert_encoding(trim($a[0]), $encoding, 'auto')
+	  fclose($fp);
+	  return trim($a[1]);
+	  # mb_convert_encoding(trim($a[1]), $encoding, 'auto');
+	}
+      }
+      fclose($fp);
+    }
+    return NULL;
+  }
+
+  function PrintSelectItemWithList($key, $listfile, $size, $multiple, $selection) {
+    #$encoding = mb_internal_encoding();
+    if (strlen($multiple)) {
+      printf('<select name="%s[]" size="%d" multiple>', $key, $size);
+    } else {
+      printf('<select name="%s" size="%d">', $key, $size);
+      print('<option value=""></option>');
+    }
+    if (($fp = fopen($listfile, 'r', 1))) {
+      while (($s = fgets($fp, CSV_LINE_LIMIT))) {
+	$s = trim($s);#mb_convert_encoding(trim($s), $encoding, 'auto');
+	printf('<option%s>%s</option>', (Form::IsSelected($s, $selection)) ? ' selected' : '', htmlspecialchars($s, ENT_QUOTES));
+      }
+      fclose($fp);
+    }
+    print('</select>');
+  }
+
+  function PrintSelectItemWithArray($key, $array, $size, $multiple, $selection) {
+    if (strlen($multiple)) {
+      printf('<select name="%s[]" size="%d" multiple>', $key, $size);
+    } else {
+      printf('<select name="%s" size="%d">', $key, $size);
+      print('<option value=""></option>');
+    }
+    if (is_array($array) && count($array)) {
+      foreach ($array as $i) {
+	if (is_array($i)) {
+	  $val = trim($i[0]);
+	  $str = trim($i[1]);
+	} else {
+	  $val = trim($i);
+	  $str = $val;
+	}
+	printf('<option value="%s"%s>%s</option>', htmlspecialchars($val, ENT_QUOTES), (Form::IsSelected($val, $selection)) ? ' selected' : '', htmlspecialchars($str, ENT_QUOTES));
+      }
+    }
+    print('</select>');
+  }
+
+  function PrintSelectItemWithNumber($key, $min, $max, $step, $format, $size, $multiple, $selection) {
+    if (strlen($multiple)) {
+      printf('<select name="%s[]" size="%d" multiple>', $key, $size);
+    } else {
+      printf('<select name="%s" size="%d">', $key, $size);
+      print('<option value=""></option>');
+    }
+    if ($step == 0) $step = 1;
+    if (!strlen($format)) $format = '%d';
+    for ($i = $min; $i <= $max; $i += $step) {
+      printf('<option value="' . $format . '"%s>' . $format . '</option>', $i, (Form::IsSelected($i, $selection)) ? ' selected' : '', $i);
+    }
+    print('</select>');
+  }
+
+}
+
+</script>

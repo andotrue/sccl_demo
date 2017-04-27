@@ -1,0 +1,89 @@
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=euc-jp">
+		<title><?php Web::PrintString(Item::SpendingTypeString($spending_type)); ?></title>
+		<script language="JavaScript">
+			<!-- hide from other browsers
+			//------------------
+			document.write('<STYLE TYPE="text/css"><!--');
+			if (navigator.appVersion.indexOf("Mac") >= 1) {
+				document.write('.css4 {font-Size:14px; line-height:16px}');
+				document.write('.css3 {font-Size:12px; line-height:16px}');
+				document.write('.css2 {font-Size:10px; line-height:13px}');
+				document.write('.css1 {font-Size:9px; line-height:13px}');
+			} else {
+				document.write('.css4 {font-Size:16px; line-height:18px}');
+				document.write('.css3 {font-Size:14px; line-height:16px}');
+				document.write('.css2 {font-Size:12px; line-height:14px}');
+				document.write('.css1 {font-Size:11px; line-height:14px}');
+			}
+			document.write('//--></STYLE>');
+			// stop hiding from other browsers -->
+		</script>
+		<style>
+			<!--
+			A:link{color:#394291;text-decoration:none}
+			A:visited{color:#394291;text-decoration:none}
+			A:hover{color:#eeaa00;text-decoration:none}
+			-->
+		</style>
+	</head>
+	<body bgcolor="#ffffff" marginheight="0" topmargin="0" marginwidth="0" leftmargin="0" text="#333333" link="#aaaaaa" alink="#000000" vlink="#aaaaaa">
+		<center>
+			<table border="0" cellspacing="0" cellpadding="0" width="511" height="100%" bgcolor="#ffffff">
+				<tr>
+					<td valign="top">
+						<table border="0" cellspacing="0" cellpadding="2" width="511">
+							<tr bgcolor="#718542">
+								<td colspan="2" height="20"><font class="css2" size="2" color="#ffffff"><b>■ <?php Web::PrintString(Item::SpendingTypeString($spending_type)); ?>・内訳 </b>[<?php print($disp_year); ?>/<?php printf('%02d', $disp_month); ?>]</font></td>
+							</tr>
+							<?php $items = $diary->itemsWithYearAndMonth($disp_year, $disp_month); ?>
+							<?php $filtered = Diary::FilteredItemsWithSpendingType($items, $spending_type); ?>
+							<?php $sum = 0; ?>
+							<?php foreach ($filtered as $item) { ?>
+								<tr>
+									<td colspan="2" bgcolor="#baba9e"><img src="../img/sp.gif" width="1" height="5" border="0"></td>
+								</tr>
+								<tr>
+									<td>
+										<table border="0" cellspacing="0" cellpadding="2" width="511">
+											<?php $i = 0; foreach ($item->spendings as $spending) { ?>
+												<?php $bgcolor = ($i++ % 2) ? '#e7e9e1' : '#f5f5f5'; ?>
+												<?php $sum += $spending['amount']; ?>
+												<tr>
+													<?php if ($i == 1) { ?>
+														<td align="left" bgcolor="#f5f5f5" width="80"><font class="css1" size="1"><?php print($item->month); ?>月<?php print($item->day); ?>日（<?php Web::PrintString($item->weekdayString()); ?>）</font></td>
+													<?php } else { ?>
+														<td align="center" bgcolor="#f5f5f5"><font class="css1" size="1">　</font></td>
+													<?php } ?>
+													<td align="left" bgcolor="<?php print($bgcolor); ?>"><font class="css1" size="1">・ <?php Web::PrintString($spending['name']); ?><?php if (strlen($spending['place'])) { ?>（<?php Web::PrintString($spending['place']); ?>）<?php } ?><?php if (strlen($spending['comment'])) { ?>（<?php Web::PrintString($spending['comment']); ?>）<?php } ?></font></td>
+													<td align="right" bgcolor="<?php print($bgcolor); ?>"><font class="css1" size="1"><?php print(number_format($spending['amount'])); ?>円</font></td>
+												</tr>
+											<?php } ?>
+										</table>
+									</td>
+								</tr>
+							<?php } ?>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="511">
+							<tr>
+								<td bgcolor="#718542"><img src="../img/sp.gif" width="511" height="1" border="0"></td>
+							</tr>
+							<tr>
+								<td align="right"><font class="css1" size="1"><b>合計：<?php print(number_format($sum)); ?>円</b></font></td>
+							</tr>
+						</table>
+<!-- ▼ --
+						<table border="0" cellspacing="0" cellpadding="0" width="511" bgcolor="#baba9e">
+							<tr>
+								<td><img src="../img/sp.gif" width="1" height="5" border="0"></td>
+							</tr>
+						</table>
+!-- ▲ -->
+					</td>
+				</tr>
+			</table>
+		</center>
+	</body>
+</html>
+<?php exit(); ?>

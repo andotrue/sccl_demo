@@ -1,0 +1,123 @@
+<script language='php'>
+
+require_once('Classes/Diary.class');
+require_once('Classes/Photo.class');
+
+define('SPENDING_TYPES_CSV', 'SpendingTypes.csv');
+define('WEEKDAY_STRINGS_CSV', 'WeekdayStrings.csv');
+
+class Item {
+
+  var $id;
+  var $year;
+  var $month;
+  var $day;
+  var $comment;
+  var $photo_id;
+  var $spendings;
+
+  function Item($diary) {
+    $this->id = uniqid('');
+    $this->spendings = array ();
+
+    $today = getdate();
+    $this->year = $today['year'];
+    $this->month = $today['mon'];
+    $this->day = $today['mday'];
+  }
+
+  function delete() {
+    return $this->deletePhoto();
+  }
+
+////
+
+  function setPhoto($file) {
+    $photo = new Photo($this);
+    if ($photo->setFile($file)) {
+      if ($this->deletePhoto()) {
+	if ($photo->save()) {
+	  $this->photo_id = $photo->id;
+	  return TRUE;
+	}
+      }
+    }
+    return FALSE;
+  }
+
+  function deletePhoto() {
+    $photo = $this->photo();
+    if ($photo) {
+      if (!($photo->delete())) {
+	return FALSE;
+      }
+    }
+    $this->photo_id = NULL;
+    return TRUE;
+  }
+
+  function photo() {
+    if ($this->hasPhoto()) {
+      return Photo::PhotoWithItem($this);
+    }
+    return NULL;
+  }
+
+  function hasPhoto() {
+    return (strlen($this->photo_id));
+  }
+
+  function photoUrl() {
+    $p = $this->photo();
+    if ($p) return $p->urlPath();
+    return NULL;
+  }
+
+  function weekdayString() {
+     $a = Item::WeekdayStrings();
+     $w = strftime('%u', mktime(0, 0, 0, $this->month, $this->day, $this->year));
+     return $a[$w];
+  }
+
+////
+
+  function SpendingTypeString($key) {
+    foreach (Item::SpendingTypes() as $type) {
+      if ($type[0] == $key) return $type[1];
+    }
+    return NULL;
+  }
+
+  function SpendingTypes() {
+    static $types;
+    if (!isset($types)) {
+      if (($fp = fopen(SPENDING_TYPES_CSV, 'r', 1))) {
+	#$encoding = mb_internal_encoding();
+	
+	while (($a = fgetcsv($fp, 1024, ','))) {
+	  //$a[1] = mb_convert_encoding(trim($a[1]), $encoding, 'auto');
+	  //print $a[1];
+	  $types[] = $a;
+	}
+      }
+    }
+    return $types;
+  }
+
+  function WeekdayStrings() {
+    static $strings;
+    if (!isset($strings)) {
+      if (($fp = fopen(WEEKDAY_STRINGS_CSV, 'r', 1))) {
+		#$encoding = mb_internal_encoding();
+		while (($a = fgetcsv($fp, 1024, ','))) {
+		  #$strings[$a[0]] = mb_convert_encoding(trim($a[1]), $encoding, 'auto');
+		  $strings[$a[0]] = trim($a[1]);
+		}
+      }
+    }
+    return $strings;
+  }
+
+}
+
+</script>

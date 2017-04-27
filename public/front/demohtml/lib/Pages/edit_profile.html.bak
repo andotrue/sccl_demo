@@ -1,0 +1,112 @@
+<html>
+	<head>
+		<title>プロフィール画面</title>
+		<script language="JavaScript">
+			<!-- hide from other browsers
+			//------------------
+			document.write('<STYLE TYPE="text/css"><!--');
+			if (navigator.appVersion.indexOf("Mac") >= 1) {
+				document.write('.css4 {font-Size:14px; line-height:16px}');
+				document.write('.css3 {font-Size:12px; line-height:16px}');
+				document.write('.css2 {font-Size:10px; line-height:13px}');
+				document.write('.css1 {font-Size:9px; line-height:13px}');
+			} else {
+				document.write('.css4 {font-Size:16px; line-height:18px}');
+				document.write('.css3 {font-Size:14px; line-height:16px}');
+				document.write('.css2 {font-Size:12px; line-height:14px}');
+				document.write('.css1 {font-Size:11px; line-height:14px}');
+			}
+			document.write('//--></STYLE>');
+			// stop hiding from other browsers -->
+		</script>
+		<style>
+			<!--
+			A:link{color:#394291;text-decoration:none}
+			A:visited{color:#394291;text-decoration:none}
+			A:hover{color:#eeaa00;text-decoration:none}
+			-->
+			</style>
+	</head>
+	<body bgcolor="#ffffff" marginheight="0" topmargin="0" marginwidth="0" leftmargin="0" text="#333333" link="#aaaaaa" alink="#000000" vlink="#aaaaaa">
+		<form method="POST" action="<?php print(Web::ApplicationUrl()); ?>">
+			<input type="hidden" name="page" value="edit_profile">
+			<input type="hidden" name="user_id" value="<?php Web::PrintString($user->id); ?>">
+			<input type="hidden" name="disp_year" value="<?php Web::PrintString($disp_year); ?>">
+			<input type="hidden" name="disp_month" value="<?php Web::PrintString($disp_month); ?>">
+			<center>
+				<table border="0" cellspacing="0" cellpadding="0" width="604" height="100%" bgcolor="#ffffff">
+					<tr>
+						<td valign="top">
+							<table border="0" cellspacing="0" cellpadding="0" width="604" bgcolor="#272727">
+								<tr>
+									<td><img src="../img/sp.gif" width="10" height="1" border="0"></td>
+									<td width="488" align="left"><font class="css3" size="3" color="#f4852e"><b>■</b></font><font class="css3" size="3" color="#f0602f"><b>プロフィール画面</b></font></td>
+									<td align="right"><a href="<?php print(WEB_ACROSS_URL); ?>"><img src="../img/acrosss_logo.gif" width="106" height="35" border="0"></a></td>
+								</tr>
+							</table>
+							<table border="0" cellspacing="0" cellpadding="0" width="604" bgcolor="#baba9e">
+								<tr>
+									<td><img src="../img/sp.gif" width="1" height="5" border="0"></td>
+								</tr>
+							</table>
+							<table border="0" cellspacing="0" cellpadding="0" width="604">
+								<?php if (strlen($error_message)) { ?>
+									<tr>
+										<td align="right" bgcolor="#ffeeee"><font class="css1" size="1" color="#ff8888">エラー</font></td>
+										<td bgcolor="#ffeeee"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+										<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+										<td align="left" bgcolor="#f5f5f5"><font class="css1" size="1" color="#ff8888"><?php print($error_message); ?></font></td>
+									</tr>
+									<tr>
+										<td colspan="4"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+									</tr>
+								<?php } ?>
+								<tr>
+									<td align="right" bgcolor="#e7e9e1"><font class="css1" size="1">ID Number</font></td>
+									<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td align="left" bgcolor="#f5f5f5"><font class="css1" size="1"><?php Web::PrintString($user->id); ?></font></td>
+								</tr>
+								<tr>
+									<td><img src="../img/sp.gif" width="100" height="1" border="0"></td>
+									<td><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+									<td><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+									<td><img src="../img/sp.gif" width="494" height="1" border="0"></td>
+								</tr>
+								<tr>
+									<td align="right" bgcolor="#e7e9e1"><font class="css1" size="1">氏名</font></td>
+									<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td align="left" bgcolor="#f5f5f5"><font class="css1" size="1"><?php Web::PrintString($user->name); ?></font></td>
+								</tr>
+								<tr>
+									<td colspan="4"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								</tr>
+								<tr>
+									<td valign="top" align="right" height="100" bgcolor="#e7e9e1"><font class="css1" size="1">コメント</font></td>
+									<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td align="left" bgcolor="#f5f5f5"><textarea name="comment" cols="65" rows="10"><?php Web::PrintString($user->comment); ?></textarea><br><br></td>
+								</tr>
+								<tr>
+									<td colspan="4"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								</tr>
+							</table>
+							<table border="0" cellspacing="0" cellpadding="5" width="604" bgcolor="#baba9e">
+								<tr>
+									<td align="right" height="25">
+										<font class="css1" size="1">
+										<a href="<?php print(Web::ApplicationUrl()); ?>?p=edit_diary&amp;u=<?php Web::PrintString($user->id); ?>&amp;y=<?php print($disp_year); ?>&amp;m=<?php print($disp_month); ?>">[ 戻る ]</a>　
+										<input type="submit" name="action_save" value="　保存　">
+										</font>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</center>
+		</form>
+	</body>
+</html>
+<?php exit(); ?>

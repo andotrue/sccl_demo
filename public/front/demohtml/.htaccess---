@@ -1,0 +1,8 @@
+AuthUserFile /home/www/site3/.htpasswd
+AuthGroupFile /dev/null
+AuthName "ADMIN"
+AuthType Basic
+require valid-user
+<Files ~ "^\.(htaccess|htpasswd)$">
+  deny from all
+</Files>

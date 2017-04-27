@@ -1,0 +1,95 @@
+<html>
+	<head>
+		<title>ログイン画面</title>
+		<script language="JavaScript">
+			<!-- hide from other browsers
+			//------------------
+			document.write('<STYLE TYPE="text/css"><!--');
+			if (navigator.appVersion.indexOf("Mac") >= 1) {
+				document.write('.css4 {font-Size:14px; line-height:16px}');
+				document.write('.css3 {font-Size:12px; line-height:16px}');
+				document.write('.css2 {font-Size:10px; line-height:13px}');
+				document.write('.css1 {font-Size:9px; line-height:13px}');
+			} else {
+				document.write('.css4 {font-Size:16px; line-height:18px}');
+				document.write('.css3 {font-Size:14px; line-height:16px}');
+				document.write('.css2 {font-Size:12px; line-height:14px}');
+				document.write('.css1 {font-Size:11px; line-height:14px}');
+			}
+			document.write('//--></STYLE>');
+			// stop hiding from other browsers -->
+		</script>
+		<style>
+			<!--
+			A:link{color:#394291;text-decoration:none}
+			A:visited{color:#394291;text-decoration:none}
+			A:hover{color:#eeaa00;text-decoration:none}
+			-->
+		</style>
+	</head>
+	<body bgcolor="#ffffff" marginheight="0" topmargin="0" marginwidth="0" leftmargin="0" text="#333333" link="#aaaaaa" alink="#000000" vlink="#aaaaaa">
+		<center>
+<?php
+
+print_r($_REQUEST);
+print_r($GLOBALS['HTTP_RAW_POST_DATA']);
+print $login;
+print $login_id;
+print $login_password;
+
+?>
+			<table border="0" cellspacing="0" cellpadding="0" width="325" height="100%" bgcolor="#ffffff">
+				<tr>
+					<td valign="top">
+						<table border="0" cellspacing="0" cellpadding="0" width="325">
+							<tr>
+								<td><img src="../img/sp.gif" width="1" height="100" border="0"></td>
+							</tr>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="325" bgcolor="#272727">
+							<tr>
+								<td><img src="../img/sp.gif" width="10" height="1" border="0"></td>
+								<td width="209"><font class="css3" size="3" color="#f4852e"><b>■</b></font><font class="css3" size="3" color="#f0602f"><b>Login</b></font></td>
+								<td align="right"><a href="<?php print(WEB_ACROSS_URL); ?>" target="_top"><img src="../img/acrosss_logo.gif" width="106" height="35" border="0"></a></td>
+							</tr>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="325" bgcolor="#e7e9e1">
+							<tr>
+								<td align="center">
+									<form method="POST" action="<?php print(Web::ApplicationUrl()); ?>">
+										<table border="0" cellspacing="0" cellpadding="0" bgcolor="#e7e9e1">
+											<tr>
+												<td colspan="3"><img src="../img/sp.gif" width="1" height="20" border="0"></td>
+											</tr>
+											<tr>
+												<td align="right"><font class="css3" size="3"><b>Login ID</b></font></td>
+												<td><img src="../img/sp.gif" width="10" height="1" border="0"></td>
+												<td align="right"><input type="text" name="login_id" value="<?php Web::PrintString($login_id); ?>" size="17"></td>
+											</tr>
+											<tr>
+												<td colspan="3"><img src="../img/sp.gif" width="1" height="5" border="0"></td>
+											</tr>
+											<tr>
+												<td align="right"><font class="css3" size="3"><b>password</b></font></td>
+												<td><img src="../img/sp.gif" width="10" height="1" border="0"></td>
+												<td align="right"><input type="password" name="login_password" value="<?php Web::PrintString($login_password); ?>" size="17"></td>
+											</tr>
+											<tr>
+												<td colspan="2" height="30"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+												<td align="right" valign="bottom"><input type="submit" value="Log in"></td>
+											</tr>
+											<tr>
+												<td colspan="3"><img src="../img/sp.gif" width="1" height="10" border="0"></td>
+											</tr>
+										</table>
+									</form>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</center>
+	</body>
+</html>
+<?php exit(); ?>

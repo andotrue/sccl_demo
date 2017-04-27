@@ -1,0 +1,149 @@
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=euc-jp">
+		<title>削除確認画面</title>
+		<script language="JavaScript">
+			<!-- hide from other browsers
+			//------------------
+			document.write('<STYLE TYPE="text/css"><!--');
+			if (navigator.appVersion.indexOf("Mac") >= 1) {
+				document.write('.css4 {font-Size:14px; line-height:16px}');
+				document.write('.css3 {font-Size:12px; line-height:16px}');
+				document.write('.css2 {font-Size:10px; line-height:13px}');
+				document.write('.css1 {font-Size:9px; line-height:13px}');
+			} else {
+				document.write('.css4 {font-Size:16px; line-height:18px}');
+				document.write('.css3 {font-Size:14px; line-height:16px}');
+				document.write('.css2 {font-Size:12px; line-height:14px}');
+				document.write('.css1 {font-Size:11px; line-height:14px}');
+			}
+			document.write('//--></STYLE>');
+			// stop hiding from other browsers -->
+		</script>
+		<style>
+			<!--
+			A:link{color:#394291;text-decoration:none}
+			A:visited{color:#394291;text-decoration:none}
+			A:hover{color:#eeaa00;text-decoration:none}
+			-->
+		</style>
+	</head>
+	<body bgcolor="#ffffff" marginheight="0" topmargin="0" marginwidth="0" leftmargin="0" text="#333333" link="#aaaaaa" alink="#000000" vlink="#aaaaaa">
+		<center>
+			<table border="0" cellspacing="0" cellpadding="0" width="604" height="100%" bgcolor="#ffffff">
+				<tr>
+					<td valign="top">
+						<table border="0" cellspacing="0" cellpadding="0" width="604" bgcolor="#272727">
+							<tr>
+								<td><img src="../img/sp.gif" width="10" height="1" border="0"></td>
+								<td width="488" align="left"><font class="css3" size="3" color="#f4852e"><b>■</b></font><font class="css3" size="3" color="#f0602f"><b>削除確認画面</b></font></td>
+								<td align="right"><a href="<?php print(WEB_ACROSS_URL); ?>"><img src="../img/acrosss_logo.gif" width="106" height="35" border="0"></a></td>
+							</tr>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="604" bgcolor="#baba9e">
+							<tr>
+								<td><img src="../img/sp.gif" width="10" height="35" border="0"></td>
+								<td width="563" align="left"><font class="css3" size="3" color="#ffffff"><b>■<?php WEB::PrintString($user->name); ?></b><img src="../img/sp.gif" width="20" height="1" border="0"><b>ID-<?php WEB::PrintString($user->id); ?></b></font></td>
+								<td width="31">　</td>
+							</tr>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="604" bgcolor="#baba9e">
+							<?php if (strlen($error_message)) { ?>
+								<tr>
+									<td bgcolor="#ffeeee" width="90" align="right"><font class="css1" size="1" color="#ff8888">エラー</font></td>
+									<td bgcolor="#ffeeee"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td bgcolor="#f5f5f5" width="504" colspan="6"><font class="css1" size="1" color="#ff8888"><?php print($error_message); ?></font></td>
+								</tr>
+								<tr>
+									<td colspan="9" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								</tr>
+							<?php } ?>
+							<tr>
+								<td bgcolor="#e7e9e1" width="90" align="right"><font class="css1" size="1">日付</font></td>
+								<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+								<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+								<td bgcolor="#f5f5f5" width="504" colspan="6">
+									<font class="css1" size="1">
+									<?php print($item->year); ?> 年
+									<?php print($item->month); ?> 月
+									<?php print($item->day); ?> 日
+									（<?php Web::PrintString($item->weekdayString()); ?>）
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="9" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+							</tr>
+							<tr>
+								<td bgcolor="#e7e9e1" width="90" align="right"><font class="css1" size="1">コメント</font></td>
+								<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+								<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+								<td bgcolor="#f5f5f5" width="504" colspan="6"><font class="css1" size="1"><?php print(nl2br($item->comment)); ?>　</font></td>
+							</tr>
+							<tr>
+								<td colspan="9" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+							</tr>
+							<tr>
+								<td bgcolor="#e7e9e1" width="90" align="right"><font class="css1" size="1">画像</font></td>
+								<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+								<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+								<td bgcolor="#f5f5f5" colspan="6"><?php if ($item->hasPhoto()) { ?><img src="<?php print($item->photoUrl()); ?>" border="0" vspace="5"><?php } ?>　</td>
+							</tr>
+							<tr>
+								<td colspan="9" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+							</tr>
+							<tr>
+								<td bgcolor="#e7e9e1" width="90" align="right"><font class="css1" size="1">支出</font></td>
+								<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								<td bgcolor="#f5f5f5"><font class="css1" size="1">タイプ</font></td>
+								<td bgcolor="#f5f5f5"><font class="css1" size="1">内容</font></td>
+								<td bgcolor="#f5f5f5"><font class="css1" size="1">店名/場所</font></td>
+								<td bgcolor="#f5f5f5"><font class="css1" size="1">金額</font></td>
+								<td bgcolor="#f5f5f5"><font class="css1" size="1">備考欄</font></td>
+								<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="50" height="1" border="0"></td>
+							</tr>
+							<tr>
+								<td colspan="2" bgcolor="#e7e9e1"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								<td colspan="7" bgcolor="#000000"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+							</tr>
+							<?php foreach ($item->spendings as $spending) { ?>
+								<tr bgcolor="#e5e5e5">
+									<td bgcolor="#e7e9e1" width="90" align="right">　</td>
+									<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="18" border="0"></td>
+									<td><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td><font class="css1" size="1"><?php Web::PrintString(Item::SpendingTypeString($spending['type'])); ?></font></td>
+									<td><font class="css1" size="1"><?php Web::PrintString($spending['name']); ?></font></td>
+									<td><font class="css1" size="1"><?php Web::PrintString($spending['place']); ?>　</font></td>
+									<td><font class="css1" size="1"><?php print(number_format($spending['amount'])); ?>円</font></td>
+									<td><font class="css1" size="1"><?php Web::PrintString($spending['comment']); ?>　</font></td>
+									<td align="center">　</td>
+								</tr>
+								<tr>
+									<td colspan="2" bgcolor="#e7e9e1"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+									<td colspan="7" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								</tr>
+							<?php } ?>
+							<tr>
+								<td colspan="9" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+							</tr>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="604" bgcolor="#baba9e">
+							<tr>
+								<td align="right" width="596" height="25">
+									<font class="css1" size="1">
+									<a href="<?php print(Web::ApplicationUrl()); ?>?p=edit_diary&amp;u=<?php Web::PrintString($user->id); ?>&amp;y=<?php print($item->year); ?>&amp;m=<?php print($item->month); ?>">[ 戻る ]</a>
+									<a href="<?php print(Web::ApplicationUrl()); ?>?p=delete_item&amp;a=proceed&amp;u=<?php Web::PrintString($user->id); ?>&amp;i=<?php Web::PrintString($item->id); ?>&amp;y=<?php print($item->year); ?>&amp;m=<?php print($item->month); ?>">[ 削除 ]</a>
+									</font>
+								</td>
+								<td><img src="../img/sp.gif" width="8" height="1" border="0"></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</center>
+	</body>
+</html>
+<?php exit(); ?>

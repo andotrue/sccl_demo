@@ -1,0 +1,224 @@
+<?='<?xml version="1.0" encoding="EUC-JP"?>'?>
+<?
+	define("TEMPLATE_ROOT", APP_BASE_DIR);
+	define("TEMPLATE_DIR_HEADER",TEMPLATE_ROOT."/prefs/header.html");
+	define("TEMPLATE_DIR_FOOTER",TEMPLATE_ROOT."/prefs/footer.html");
+	$id="";
+	if(isset($_REQUEST["u"])){
+		$id = $_REQUEST["u"];
+	}
+	define("TEMPLATE_DIR_RIGHT_BLOCK", TEMPLATE_ROOT."/lifestyle/".$id.".html");
+	define("TEMPLATE_DIR_AD_BLOCK", TEMPLATE_ROOT."/prefs/ad.html");
+	define("TEMPLATE_DIR_CSS","/prefs/css/body.css");
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=euc-jp">
+		<title>消費生活</title>
+		<meta http-equiv="Content-Script-Type" content="text/javascript" />
+		<meta http-equiv="Content-Style-Type" content="text/css" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link href="<?=TEMPLATE_DIR_CSS ?>" rel="stylesheet" type="text/css" media="screen, print" />
+		<link href="favicon.ico" rel="shortcut icon" />
+		
+		<script language="JavaScript">
+			<!-- //
+			
+			function openImgWin(url) {
+				var param = "toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=1, resizable=1, width=400, height=350";
+				window.open(url, "imgWin", param);
+			}
+			function openSumWin(u, y, m, st) {
+				var url = "<?php print(Web::ApplicationUrl()); ?>?p=view_spendings&u=" + u + "&y=" + y + "&m=" + m + "&st=" + st;
+				var param = "toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=1, resizable=0, width=550, height=315, left=400, top=100";
+				window.open(url, "sumWin", param)
+			}
+			// stop hiding from other browsers -->
+		</script>
+		<script src="/prefs/fontsize.js" type="text/javascript"></script>
+		<script src="/prefs/prototype.js" type="text/javascript"></script>
+		<script src="/prefs/scriptaculous.js?load=effects" type="text/javascript"></script>
+		<script src="/prefs/g.js" type="text/javascript" charset="Shift-JIS"></script>
+		<script type="text/javascript"></script>
+	</head>
+	<body>
+			<!-- Header -->
+			<?
+				if(file_exists(TEMPLATE_DIR_HEADER)){
+					require_once(TEMPLATE_DIR_HEADER);
+				}
+			?>
+			<!-- Header -->
+			<!-- body -->
+			<div id="contents">
+				<div class="breadcrumb"><a href="/">トップページ</a>&nbsp;&gt;&nbsp;<a href="/lifestyle/d6eo3n0000039i70.html">消費生活</a></div>
+				<div id="left_contents">
+					
+					<div class="shou_title" id="tfc">
+						<div class="shouhi_right">
+							<div class="page_title">
+								<div class="left">
+									<div class="title">
+										<img src="/prefs/images/title_consum.gif" alt="item image" />
+									</div>
+								</div>
+								<div class="right">
+									<h4>&nbsp;</h4>
+								</div>
+								<br clear="all" />
+							</div>
+						</div>
+					</div>
+					<!-- Diary -->
+					<div class="contents_block_left">
+						<div class="ttk_left">
+						
+							<div class="article_block_diary">
+								<div class="diary_title">
+									<div class="article_block_diary_title">
+										<img src="/prefs/images/diary.gif" alt="Diary" />
+									</div>
+									<div class="article_block_tab">
+										<?php $yms = $diary->yearAndMonthPairs(); ?>
+										<ul>
+											<?php foreach ($yms as $ym) { ?>
+												<?php $bgcolor = ($ym[0] == $disp_year && $ym[1] == $disp_month) ? '#ff7113' : '#e7e9e1'; ?>
+                                                <li><a href="<?php print(Web::ApplicationUrl()); ?>?u=<?php Web::PrintString($user->id); ?>&amp;y=<?php print($ym[0]); ?>&amp;m=<?php print($ym[1]); ?>"<?if($ym[1]==$disp_month){?> class="current"<?}?>><?php print($ym[0]); ?>/<?php printf('%02d', $ym[1]); ?></a></li>	
+        									
+											<?php } ?>
+										</ul>
+									<br clear="all" />
+									</div>
+								</div>
+								
+								<div class="article_relation">
+									<div class="column1">
+										<div class="diary_comment"><?php print(nl2br($user->comment)); ?></div>
+										<div class="diary_graph">
+										
+										<table border="0" cellspacing="0" cellpadding="0" width="350">
+											<?php $items = $diary->itemsWithYearAndMonth($disp_year, $disp_month); ?>
+											<?php $sums = Diary::SumUpSpendingsByType($items);$total=0;$max=0; ?>
+											<?php foreach ($sums as $sum) { ?>
+											<?php $total += $sum['amount']; $max = ($max > $sum['amount']) ? $max : $sum['amount']; ?>
+											<?php } ?>
+											<?php foreach ($sums as $sum) { ?>
+												<?php $percent = ($total) ? (int)($sum['amount'] / $total * 1000 + 0.5) / 10 : 0; ?>
+												<?php $width = ($max) ? (int)($sum['amount'] / $max * 225 + 0.5) : 0; ?>
+												<?php if ($width == 0) $width = 1; ?>
+												<tr>
+													<?php if (strlen($sum['amount'])) { ?>
+														<td align="right"><a href="JavaScript:openSumWin('<?php Web::PrintString($user->id); ?>', '<?php print($disp_year); ?>', '<?php print($disp_month); ?>', '<?php print($sum['type']); ?>')"><img src="/prefs/images/ar_graph.gif" alt="" />&nbsp;<?php Web::PrintString($sum['name']); ?></a></td>
+													<?php } else { ?>
+														<td align="right"><?php Web::PrintString($sum['name']); ?></td>
+													<?php } ?>
+													<td><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+													<td width="225">
+														<table border="0" cellspacing="0" cellpadding="0" bgcolor="<?php print($sum['color']); ?>">
+															<tr>
+																<td><img src="../img/sp.gif" width="<?php print($width); ?>" height="10" border="0"></td>
+															</tr>
+														</table>
+													</td>
+													<td><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+													<td align="right"><font class="css1" size="1"><?php print(number_format($sum['amount'])); ?>円</font></td>
+												</tr>
+											<?php } ?>
+											<tr>
+												<td colspan="5"><img src="../img/sp.gif" width="1" height="5" border="0"></td>
+											</tr>
+											<tr bgcolor="#d0b398">
+												<td colspan="5"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+												<td align="right" colspan="3"><font class="css2" size="2"><b>合計：<?php print(number_format($total)); ?>円</b></font></td>
+											</tr>
+										</table>
+										</div>
+										<br clear="all" />
+									</div>
+								</div>
+								
+							</div>
+							<div class="diaryIndex" class="diary">
+								<!-- for -->
+								<?
+									//print_r($items);
+								?>
+								<?php foreach ($items as $item) { ?>
+									<?php $sum = 0; ?>
+									<div class="days">
+										<div class="dates"><?php print($item->year); ?>年<?php print($item->month); ?>月<?php print($item->day); ?>日（<?php Web::PrintString($item->weekdayString()); ?>）</div>
+											
+											<div class="photo">
+												<?php if ($item->hasPhoto()) { ?>
+													<a href="JavaScript:openImgWin('<?php print($item->photoUrl()); ?>')"><img src="<?php print($item->photoUrl()); ?>" width="75" border="0"></a><br />
+													<div class="zoom"><a href="JavaScript:openImgWin('<?php print($item->photoUrl()); ?>')"><img src="/prefs/images/zoom.gif" alt=""></a></div>
+												<?php }else{ ?>
+													<img src="/prefs/images/no_photo.gif" width="75" border="0">
+												<?php } ?>
+											</div>
+											<div class="item">
+												<p><?php print(nl2br($item->comment)); ?></p>
+												 <div class="expenses">本日の支出<br clear="all" /></div>
+												<div class="today_price">
+													<ul>
+													<?php $i = 0; foreach ($item->spendings as $spending) { ?>
+														<?php $bgcolor = ($i++ % 2) ? '#f5f5f5' : '#e7e9e1'; ?>
+														<?php $sum += $spending['amount']; ?>
+														<li<?if($i%2==0){?> class="under"<?}?>><div class="price_txt"><?php Web::PrintString($spending['name']); ?><?php if (strlen($spending['place'])) { ?>（<?php Web::PrintString($spending['place']); ?>）<?php } ?><?php if (strlen($spending['comment'])) { ?>（<?php Web::PrintString($spending['comment']); ?>）<?php } ?></div><div class="price"><?php print(number_format($spending['amount'])); ?>円</div><br clear="all" /></li>
+													<?php } ?>
+														<li class="price_all">合計:<?php print(number_format($sum)); ?>円<br clear="all" /></li>
+													</ul>
+												</div>
+												<br clear="all" />
+											</div>
+											<br clear="all" />
+									</div>
+								<?php } ?>
+								<!-- item -->
+								<!-- for -->
+							</div>
+							
+						</div>
+						
+					</div>
+					
+					<!-- RIGHTブロック -->
+					<div class="contents_block_right">
+						<?
+							if($id && file_exists(TEMPLATE_DIR_RIGHT_BLOCK)){
+								require_once(TEMPLATE_DIR_RIGHT_BLOCK);
+							}
+						?>
+						
+					</div>
+					<br clear="all" />
+				</div>
+				
+				<div id="AD">
+					<?
+						if(file_exists(TEMPLATE_DIR_AD_BLOCK)){
+							require_once(TEMPLATE_DIR_AD_BLOCK);
+						}
+					?>
+				</div>
+				<br clear="all" />
+			</div>
+			<!-- body -->
+			
+			<!-- Footer -->
+			<?
+				if(file_exists(TEMPLATE_DIR_FOOTER)){
+					require_once(TEMPLATE_DIR_FOOTER);
+				}
+			?>
+			<!-- Footer -->
+			
+	</body>
+</html>
+<?php exit(); ?>

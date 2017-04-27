@@ -1,0 +1,97 @@
+<script language='php'>
+
+class String {
+
+  function Normalize($string) {
+    if (!isset($string)) return NULL;
+    #$string = mb_convert_kana($string, 'asKV');
+    return (trim($string));
+  }
+
+  function PrintInHtml($string) {
+    if (isset($string)) print(htmlspecialchars($string, ENT_QUOTES));
+  }
+
+  function UnHtmlspecialchars($string) {
+    if (!isset($string)) return NULL;
+    $string = str_replace('&quot;', '"', $string);
+    $string = str_replace('&#039;', '\'', $string);
+    $string = str_replace('&lt;', '<', $string);
+    $string = str_replace('&gt;', '>', $string);
+    $string = str_replace('&amp;', '&', $string);
+    return $string;
+  }
+
+  function ReadFromFile($file_path, $use_include_path) {
+    if (($fp = fopen($file_path, 'r', $use_include_path))) {
+      while (!feof($fp)) $result .= fread($fp, 1024);
+      fclose($fp);
+      #return mb_convert_encoding($result, mb_internal_encoding(), 'auto');
+      return $result;
+    }
+    return NULL;
+  }
+
+  function WriteToFile($file_path, $content) {
+    if (($fp = fopen($file_path, 'w', 0))) {
+      $l = strlen($content);
+      if (fwrite($fp, $content) == $l) {
+	return fclose($fp);
+      }
+    }
+    return FALSE;
+  }
+
+  function CheckEmailAddress($address) {
+    if (!isset($address)) return FALSE;
+    $address = trim($address);
+    if (!strlen($address)) return FALSE;
+    //if (strlen($address) != $address ) return FALSE;#mb_strlen($address)
+    $tmp_addr = '_' . $address;
+    if (strpos($tmp_addr, ' ')) return FALSE;
+    if (strpos($tmp_addr, '(')) return FALSE;
+    if (strpos($tmp_addr, ')')) return FALSE;
+    if (strpos($tmp_addr, '<')) return FALSE;
+    if (strpos($tmp_addr, '>')) return FALSE;
+    if (strpos($tmp_addr, ',')) return FALSE;
+    if (strpos($tmp_addr, ';')) return FALSE;
+    if (strpos($tmp_addr, ':')) return FALSE;
+    if (strpos($tmp_addr, '[')) return FALSE;
+    if (strpos($tmp_addr, ']')) return FALSE;
+    if (strpos($tmp_addr, '&')) return FALSE;
+    if (strpos($tmp_addr, '|')) return FALSE;
+    if (strpos($tmp_addr, '\'')) return FALSE;
+    if (strpos($tmp_addr, '"')) return FALSE;
+    $a = explode('@', $address);
+    if (count($a) != 2) return FALSE;
+    if (!strlen($a[0]) || !strlen($a[1])) return FALSE;
+    $a = explode('.', $a[1]);
+    if (($cnt = count($a)) < 2) return FALSE;
+    for ($i = 0; $i < $cnt; $i++) if (!strlen($a[$i])) return FALSE;
+    if (($len = strlen($a[$i - 1])) != 2 && $len != 3) return FALSE;
+    return TRUE;
+  }
+
+  function CheckPhoneNumber($phone) {
+    if (!isset($phone)) return FALSE;
+    $phone = trim($phone);
+    if (!strlen($phone)) return FALSE;
+    //if (strlen($phone) != $phone) return FALSE;#mb_strlen($phone)
+    return (ereg('^[0-9][- 0-9]+[0-9]$', $phone));
+  }
+
+  function CheckPostalCode($postal) {
+    return String::CheckPhoneNumber($postal);
+  }
+
+  function CheckInteger($integer) {
+    if (!isset($integer)) return FALSE;
+    $integer = trim($integer);
+    if (!strlen($integer)) return FALSE;
+    //if (strlen($integer) != $integer) return FALSE;#mb_strlen($integer)
+    return (ereg('^[0-9]+$', $integer));
+  }
+
+}
+
+</script>

@@ -1,0 +1,182 @@
+<script language='php'>
+
+require_once('Classes/User.class');
+require_once('Classes/Item.class');
+
+define('DATA_DIARY_DIR', DATA_BASE_DIR . '/Diary');
+
+class Diary {
+
+  var $id;
+  var $items;
+
+  function Diary($user) {
+    $this->id = $user->id;
+    $this->items = array ();
+  }
+
+  function save() {
+    $temp_path = $this->tempPath();
+    if (($fp = fopen($temp_path, 'w', 0))) {
+      $s = serialize($this);
+      $l = strlen($s);
+      if ($l > 0 && fwrite($fp, $s) == $l) {
+	if (fclose($fp)) {
+	  return rename($temp_path, $this->filePath());
+	}
+      }
+    }
+    unlink($temp_path);
+    return FALSE;
+  }
+
+  function delete() {
+    foreach ($this->items as $item) {
+      $this->deleteItem($item);
+    }
+    return unlink($this->filePath());
+  }
+
+  function filePath() {
+    return Diary::FilePathWithId($this->id);
+  }
+
+  function tempPath() {
+    return Diary::TempPathWithId($this->id);
+  }
+
+////
+
+  function itemWithId($item_id) {
+    if (strlen($item_id)) {
+      return $this->items[$item_id];
+    }
+    return NULL;
+  }
+
+  function _item_cmp($a, $b) {
+    $sa = sprintf('%04d%02d%02d', $a->year, $a->month, $a->day);
+    $sb = sprintf('%04d%02d%02d', $b->year, $b->month, $b->day);
+    return ($sa < $sb) ? +1 : -1;
+  }
+
+  function addItem($item) {
+    $item_id = $item->id;
+    if (strlen($item_id)) {
+      $this->items[$item_id] = $item;
+      uasort($this->items, array ('Diary', '_item_cmp'));
+      return TRUE;
+    }
+    return FALSE;
+  }
+
+  function deleteItem($item) {
+    $item_id = $item->id;
+    if (strlen($item_id)) {
+      if ($item->delete()) {
+	unset($this->items[$item_id]);
+	return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  function latestItem() {
+    reset($this->items);
+    return current($this->items);
+  }
+
+  function itemsWithYearAndMonth($year, $month) {
+    $result = array ();
+    foreach ($this->items as $key => $item) {
+      if ($item->year == $year && $item->month == $month) {
+	$result[$key] = $item;
+      }
+    }
+    return $result;
+  }
+
+  function yearAndMonthPairs() {
+    $result = array ();
+    foreach ($this->items as $item) {
+      if ($y != $item->year || $m != $item->month) {
+	$y = $item->year;
+	$m = $item->month;
+	$result[] = array ($y, $m);
+      }
+    }
+    return $result;
+  }
+
+////
+
+  function FilePathWithId($id) {
+    if (!strlen($id)) exit();
+    return DATA_DIARY_DIR . '/' . $id . '.dat';
+  }
+
+  function TempPathWithId($id) {
+    if (!strlen($id)) exit();
+    return tempnam(DATA_DIARY_DIR, $id . '.');
+  }
+
+  function DiaryWithFilePath($file_path) {
+    if (($fp = @fopen($file_path, 'r', 0))) {
+      while (!feof($fp)) $s .= fread($fp, 1024);
+      fclose($fp);
+      return unserialize($s);
+    }
+    return NULL;
+  }
+
+  function DiaryWithId($id) {
+    return Diary::DiaryWithFilePath(Diary::FilePathWithId($id));
+  }
+
+  function DiaryWithUser($user) {
+    return Diary::DiaryWithId($user->id);
+  }
+
+  function DeleteDiaryWithId($id) {
+    $d = Diary::DiaryWithId($id);
+    if ($d) return $d->delete();
+    return FALSE;
+  }
+
+  function DeleteDiaryWithUser($user) {
+    return Diary::DeleteDiaryWithId($user->id);
+  }
+
+  function SumUpSpendingsByType(&$items) {
+    $result = array ();
+    foreach ($items as $item) {
+      foreach ($item->spendings as $spending) {
+	$amounts[$spending['type']] += $spending['amount'];
+      }
+    }
+    foreach (Item::SpendingTypes() as $type) {
+      $result[] = array ('type' => $type[0], 'name' => $type[1], 'amount' => $amounts[$type[0]], 'color' => $type[2]);
+    }
+    return $result;
+  }
+
+  function FilteredItemsWithSpendingType(&$items, $type) {
+    $result = array ();
+    foreach ($items as $item) {
+      $spendings = array ();
+      foreach ($item->spendings as $spending) {
+	if ($spending['type'] == $type) {
+	  $spendings[] = $spending;
+	}
+      }
+      if (count($spendings)) {
+	$item->spendings = $spendings;
+	$result[] = $item;
+      }
+    }
+    return $result;
+  }
+
+}
+
+</script>

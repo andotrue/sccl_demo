@@ -1,0 +1,46 @@
+<script language='php'>
+
+class Web {
+
+  function DisguiseMyself() {
+    if (strstr($_SERVER['REQUEST_URI'], $_SERVER['PHP_SELF'])) {
+      header('HTTP/1.1 404 Not Found');
+      header('Content-Type: text/html; charset=iso-8859-1');
+      print('<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">' . "\n");
+      print('<HTML><HEAD>' . "\n");
+      print('<TITLE>404 Not Found</TITLE>' . "\n");
+      print('</HEAD><BODY>' . "\n");
+      print('<H1>Not Found</H1>' . "\n");
+      print('The requested URL ' . $_SERVER['PHP_SELF'] . ' was not found on this server.<P>' . "\n");
+      print('<HR>' . "\n");
+      print($_SERVER['SERVER_SIGNATURE']);
+      print('</BODY></HTML>' . "\n");
+      exit();
+    }
+  }
+
+  function DisableCaching() {
+    header('Expires: Mon, 01 Jan 2001 00:00:00 GMT');
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+    header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: no-cache');
+  }
+
+  function RedirectTo($url) {
+    if (!strlen($url)) $url = '/';
+    header('Status: 302 Moved Temporarily');
+    header('Location: ' . $url);
+  }
+
+  function ApplicationUrl() {
+    $sn = $_SERVER['PHP_SELF'];
+    return substr($sn, 0, strlen($sn) - strlen(basename($sn)));
+  }
+
+  function PrintString($string) {
+    if (isset($string)) print(htmlspecialchars($string, ENT_QUOTES));
+  }
+
+}
+
+</script>

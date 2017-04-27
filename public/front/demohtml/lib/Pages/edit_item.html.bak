@@ -1,0 +1,164 @@
+<html>
+	<head>
+		<title>編集画面</title>
+		<script language="JavaScript">
+			<!-- hide from other browsers
+			//------------------
+			document.write('<STYLE TYPE="text/css"><!--');
+			if (navigator.appVersion.indexOf("Mac") >= 1) {
+				document.write('.css4 {font-Size:14px; line-height:16px}');
+				document.write('.css3 {font-Size:12px; line-height:16px}');
+				document.write('.css2 {font-Size:10px; line-height:13px}');
+				document.write('.css1 {font-Size:9px; line-height:13px}');
+			} else {
+				document.write('.css4 {font-Size:16px; line-height:18px}');
+				document.write('.css3 {font-Size:14px; line-height:16px}');
+				document.write('.css2 {font-Size:12px; line-height:14px}');
+				document.write('.css1 {font-Size:11px; line-height:14px}');
+			}
+			document.write('//--></STYLE>');
+			// stop hiding from other browsers -->
+		</script>
+		<style>
+			<!--
+			A:link{color:#394291;text-decoration:none}
+			A:visited{color:#394291;text-decoration:none}
+			A:hover{color:#eeaa00;text-decoration:none}
+			-->
+		</style>
+	</head>
+	<body bgcolor="#ffffff" marginheight="0" topmargin="0" marginwidth="0" leftmargin="0" text="#333333" link="#aaaaaa" alink="#000000" vlink="#aaaaaa">
+		<form method="POST" action="<?php print(Web::ApplicationUrl()); ?>" enctype="multipart/form-data">
+			<input type="hidden" name="page" value="edit_item">
+			<input type="hidden" name="user_id" value="<?php Web::PrintString($user->id); ?>">
+			<input type="hidden" name="item_id" value="<?php Web::PrintString($item->id); ?>">
+			<center>
+				<table border="0" cellspacing="0" cellpadding="0" width="604" height="100%" bgcolor="#ffffff">
+					<tr>
+						<td valign="top">
+							<table border="0" cellspacing="0" cellpadding="0" width="604" bgcolor="#272727">
+								<tr>
+									<td><img src="../img/sp.gif" width="10" height="1" border="0"></td>
+									<td width="488" align="left"><font class="css3" size="3" color="#f4852e"><b>■</b></font><font class="css3" size="3" color="#f0602f"><b>編集画面</b></font></td>
+									<td align="right"><a href="<?php print(WEB_ACROSS_URL); ?>"><img src="../img/acrosss_logo.gif" width="106" height="35" border="0"></a></td>
+								</tr>
+							</table>
+							<table border="0" cellspacing="0" cellpadding="0" width="604" bgcolor="#baba9e">
+								<tr>
+									<td><img src="../img/sp.gif" width="10" height="35" border="0"></td>
+									<td width="563" align="left"><font class="css3" size="3" color="#ffffff"><b>■<?php WEB::PrintString($user->name); ?></b><img src="../img/sp.gif" width="20" height="1" border="0"><b>ID-<?php WEB::PrintString($user->id); ?></b></font></td>
+									<td width="31"><!-- a href="???"><img src="../img/shinki.gif" width="21" height="29" border="0" -->　</td>
+								</tr>
+							</table>
+							<table border="0" cellspacing="0" cellpadding="0" width="604" bgcolor="#baba9e">
+								<?php if (strlen($error_message)) { ?>
+									<tr>
+										<td bgcolor="#ffeeee" width="90" align="right"><font class="css1" size="1" color="#ff8888">エラー</font></td>
+										<td bgcolor="#ffeeee"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+										<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+										<td bgcolor="#f5f5f5" width="504" colspan="6"><font class="css1" size="1" color="#ff8888"><?php print($error_message); ?></font></td>
+									</tr>
+									<tr>
+										<td colspan="9" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+									</tr>
+								<?php } ?>
+								<tr>
+									<td bgcolor="#e7e9e1" width="90" align="right"><font class="css1" size="1">日付</font></td>
+									<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td bgcolor="#f5f5f5" width="504" colspan="6">
+										<?php $today = getdate(); ?>
+										<?php $year_from = $today['year'] - 1; ?>
+										<?php $year_to = $today['year'] + 1; ?>
+										<?php if ($item->year < $year_from) $year_from = $item->year; ?>
+										<?php if ($item->year > $year_to) $year_to = $item->year; ?>
+										<?php Form::PrintSelectItemWithNumber('year', $year_from, $year_to, 1, NULL, 1, FALSE, $item->year); ?> 年
+										<?php Form::PrintSelectItemWithNumber('month', 1, 12, 1, NULL, 1, FALSE, $item->month); ?> 月
+										<?php Form::PrintSelectItemWithNumber('day', 1, 31, 1, NULL, 1, FALSE, $item->day); ?> 日
+									</td>
+								</tr>
+								<tr>
+									<td colspan="9" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								</tr>
+								<tr>
+									<td bgcolor="#e7e9e1" width="90" align="right"><font class="css1" size="1">コメント</font></td>
+									<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="100" border="0"></td>
+									<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+									<td bgcolor="#f5f5f5" width="504" colspan="6"><textarea name="comment" cols="65" rows="7"><?php Web::PrintString($item->comment); ?></textarea></td>
+								</tr>
+								<tr>
+									<td colspan="9" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								</tr>
+								<tr>
+									<td bgcolor="#e7e9e1" width="90" align="right"><font class="css1" size="1">画像</font></td>
+									<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+									<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+									<td bgcolor="#f5f5f5" colspan="6">
+										<img src="../img/sp.gif" width="1" height="5" border="0"><br>
+										<input type="file" name="photo"><font class="css1" size="1">（ファイルサイズは <?php print(PHOTO_FILESIZE_MAX / 1024); ?>kB までです）</font><br>
+										<?php if ($item->hasPhoto()) { ?><img src="<?php print($item->photoUrl()); ?>" border="0" vspace="5"><?php } ?>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="9" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								</tr>
+								<tr>
+									<td bgcolor="#e7e9e1" width="90" align="right"><font class="css1" size="1">支出</font></td>
+									<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+									<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+									<td bgcolor="#f5f5f5"><font class="css1" size="1">タイプ</font></td>
+									<td bgcolor="#f5f5f5"><font class="css1" size="1">内容</font></td>
+									<td bgcolor="#f5f5f5"><font class="css1" size="1">店名/場所</font></td>
+									<td bgcolor="#f5f5f5"><font class="css1" size="1">金額</font></td>
+									<td bgcolor="#f5f5f5"><font class="css1" size="1">備考欄</font></td>
+									<td bgcolor="#f5f5f5"><img src="../img/sp.gif" width="50" height="1" border="0"></td>
+								</tr>
+								<tr>
+									<td colspan="2" bgcolor="#e7e9e1"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+									<td colspan="7" bgcolor="#000000"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								</tr>
+								<?php foreach ($item->spendings as $key => $val) { ?>
+									<tr bgcolor="#e5e5e5">
+										<td bgcolor="#e7e9e1" width="90" align="right">　</td>
+										<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="18" border="0"></td>
+										<td><img src="../img/sp.gif" width="5" height="30" border="0"></td>
+										<td><?php Form::PrintSelectItemWithArray('spendings[' . $key . '][type]', Item::SpendingTypes(), 1, FALSE, $val['type']); ?></td>
+										<td><input name="spendings[<?php print($key); ?>][name]" type="text" size="10" value="<?php Web::PrintString($val['name']); ?>"></td>
+										<td><input name="spendings[<?php print($key); ?>][place]" type="text" size="15" value="<?php Web::PrintString($val['place']); ?>"></td>
+										<td><input name="spendings[<?php print($key); ?>][amount]" type="text" size="5" value="<?php Web::PrintString($val['amount']); ?>"><font class="css1" size="1">円</font></td>
+										<td><input name="spendings[<?php print($key); ?>][comment]" type="text" size="10" value="<?php Web::PrintString($val['comment']); ?>"></td>
+										<td align="center"><input type="submit" name="action_delete_spending_<?php print($key); ?>" value="削除"></td>
+									</tr>
+									<tr>
+										<td colspan="2" bgcolor="#e7e9e1"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+										<td colspan="7" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+									</tr>
+								<?php } ?>
+								<tr>
+									<td colspan="2" bgcolor="#e7e9e1"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+									<td bgcolor="#e7e9e1"><img src="../img/sp.gif" width="5" height="18" border="0"></td>
+									<td bgcolor="#e5e5e5" colspan="6" height="25"><input type="submit" name="action_add_spending" value="支出欄を追加▼"></td>
+								</tr>
+								<tr>
+									<td colspan="9" bgcolor="#ffffff"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+								</tr>
+							</table>
+							<table border="0" cellspacing="0" cellpadding="0" width="604" bgcolor="#baba9e">
+								<tr>
+									<td align="right" width="596" height="25">
+										<font class="css1" size="1">
+										<a href="<?php print(Web::ApplicationUrl()); ?>?p=edit_diary&amp;u=<?php Web::PrintString($user->id); ?>&amp;y=<?php print($item->year); ?>&amp;m=<?php print($item->month); ?>">[ 戻る ]</a>　
+										<input type="submit" name="action_save" value="　保存　">
+										</font>
+									</td>
+									<td><img src="../img/sp.gif" width="8" height="1" border="0"></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</center>
+		</form>
+	</body>
+</html>
+<?php exit(); ?>

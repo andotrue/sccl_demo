@@ -1,0 +1,207 @@
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=euc-jp">
+		<title>消費生活者リスト画面</title>
+		<script language="JavaScript">
+			<!-- hide from other browsers
+			//------------------
+			document.write('<STYLE TYPE="text/css"><!--');
+			if (navigator.appVersion.indexOf("Mac") >= 1) {
+				document.write('.css4 {font-Size:14px; line-height:16px}');
+				document.write('.css3 {font-Size:12px; line-height:16px}');
+				document.write('.css2 {font-Size:10px; line-height:13px}');
+				document.write('.css1 {font-Size:9px; line-height:13px}');
+			} else {
+				document.write('.css4 {font-Size:16px; line-height:18px}');
+				document.write('.css3 {font-Size:14px; line-height:16px}');
+				document.write('.css2 {font-Size:12px; line-height:14px}');
+				document.write('.css1 {font-Size:11px; line-height:14px}');
+			}
+			document.write('//--></STYLE>');
+			function openImgWin(url) {
+				var param = "toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=1, resizable=1, width=400, height=350";
+				window.open(url, "imgWin", param);
+			}
+			function openSumWin(u, y, m, st) {
+				var url = "<?php print(Web::ApplicationUrl()); ?>?p=view_spendings&u=" + u + "&y=" + y + "&m=" + m + "&st=" + st;
+				var param = "toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=1, resizable=0, width=550, height=315, left=400, top=100";
+				window.open(url, "sumWin", param)
+			}
+			// stop hiding from other browsers -->
+		</script>
+		<style>
+			<!--
+			A:link{color:#394291;text-decoration:none}
+			A:visited{color:#394291;text-decoration:none}
+			A:hover{color:#eeaa00;text-decoration:none}
+			-->
+		</style>
+	</head>
+	<body bgcolor="#ffffff" marginheight="0" topmargin="0" marginwidth="0" leftmargin="0" text="#333333" link="#aaaaaa" alink="#000000" vlink="#aaaaaa">
+			<table border="0" cellspacing="0" cellpadding="0" width="590" height="100%" bgcolor="#ffffff">
+				<tr>
+					<td valign="top">
+						<table border="0" cellspacing="0" cellpadding="0" width="590" bgcolor="#272727">
+							<tr>
+								<td><img src="../img/sp.gif" width="10" height="1" border="0"></td>
+								<td width="488" align="left"><font class="css3" size="3" color="#f4852e"><b>■</b></font><font class="css3" size="3" color="#f0602f"><b>消費生活者リスト画面</b></font></td>
+								<td align="right"><a href="<?php print(WEB_ACROSS_URL); ?>"><img src="../img/acrosss_logo.gif" width="106" height="35" border="0"></a></td>
+							</tr>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="590">
+							<tr>
+								<td><img src="../img/sp.gif" width="10" height="30" border="0"></td>
+								<td align="left"><font class="css3" size="3"><b>ID-<?php WEB::PrintString($user->id); ?><img src="../img/sp.gif" width="10" height="1" border="0"><?php WEB::PrintString($user->name); ?></b></font></td>
+								<td align="right" valign="bottom">
+									<font class="css1" size="1"><a href="<?php print(Web::ApplicationUrl()); ?>?logout=YES">[ ログアウト ]</a><br></font>
+									<table border="0" cellspacing="0" cellpadding="0">
+										<?php $yms = $diary->yearAndMonthPairs(); ?>
+										<tr>
+											<?php foreach ($yms as $ym) { ?>
+												<?php $bgcolor = ($ym[0] == $disp_year && $ym[1] == $disp_month) ? '#ff7113' : '#e7e9e1'; ?>
+												<td width="80" bgcolor="<?php print($bgcolor); ?>" align="center"><font class="css1" size="1" color="#ffffff"><a href="<?php print(Web::ApplicationUrl()); ?>?p=edit_diary&amp;u=<?php Web::PrintString($user->id); ?>&amp;y=<?php print($ym[0]); ?>&amp;m=<?php print($ym[1]); ?>"><?php print($ym[0]); ?>/<?php printf('%02d', $ym[1]); ?></a></font></td>
+												<td><img src="../img/sp.gif" width="12" height="15" border="0"></td>
+											<?php } ?>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="590" bgcolor="#d5dcca">
+							<tr>
+								<td bgcolor="#dddddd" colspan="9"><img src="../img/sp.gif" width="590" height="3" border="0"></td>
+							</tr>
+							<tr>
+								<td bgcolor="#6f7a4e" colspan="9"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+							</tr>
+							<tr>
+								<td><img src="../img/sp.gif" width="35" height="1" border="0"></td>
+								<td><a href="<?php print(Web::ApplicationUrl()); ?>?p=edit_item&amp;a=create&amp;u=<?php Web::PrintString($user->id); ?>"><img src="../img/shinki.gif" width="21" height="29" border="0"></a></td>
+								<td><img src="../img/sp.gif" width="35" height="1" border="0"></td>
+								<td><img src="../img/line.gif" width="2" height="40" border="0"></td>
+								<td><img src="../img/sp.gif" width="10" height="1" border="0"></td>
+								<td align="left"><a href="<?php print(Web::ApplicationUrl()); ?>?p=edit_profile&amp;a=edit&amp;u=<?php Web::PrintString($user->id); ?>&amp;y=<?php print($disp_year); ?>&amp;m=<?php print($disp_month); ?>"><img src="../img/profile_hensyu.gif" width="75" height="29" border="0"></a></td>
+								<td><img src="../img/sp.gif" width="10" height="1" border="0"></td>
+								<td><img src="../img/line.gif" width="2" height="40" border="0"></td>
+								<td><img src="../img/sp.gif" width="400" height="1" border="0"></td>
+							</tr>
+							<tr>
+								<td bgcolor="#6f7a4e" colspan="9"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+							</tr>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="590">
+							<tr>
+								<td colspan="5"><img src="../img/sp.gif" width="1" height="10" border="0"></td>
+							</tr>
+							<tr valign="top">
+								<td><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+								<td width="225"><font class="css1" size="1"><?php print(nl2br($user->comment)); ?>　</font></td>
+								<td width="5"><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+								<td align="right" width="350">
+									<table border="0" cellspacing="0" cellpadding="0" width="350">
+										<?php $items = $diary->itemsWithYearAndMonth($disp_year, $disp_month); ?>
+										<?php $sums = Diary::SumUpSpendingsByType($items); ?>
+										<?php foreach ($sums as $sum) { ?>
+											<?php $total += $sum['amount']; $max = ($max > $sum['amount']) ? $max : $sum['amount']; ?>
+										<?php } ?>
+										<?php foreach ($sums as $sum) { ?>
+											<?php //$percent = ($total) ? (int)($sum['amount'] / $total * 1000 + 0.5) / 10 : 0; ?>
+											<?php $width = ($max) ? (int)($sum['amount'] / $max * 225 + 0.5) : 0; ?>
+											<?php if ($width == 0) $width = 1; ?>
+											<tr>
+												<?php if (strlen($sum['amount'])) { ?>
+													<td align="right"><a href="JavaScript:openSumWin('<?php Web::PrintString($user->id); ?>', '<?php print($disp_year); ?>', '<?php print($disp_month); ?>', '<?php print($sum['type']); ?>')"><font class="css1" size="1"><?php Web::PrintString($sum['name']); ?></font></a></td>
+												<?php } else { ?>
+													<td align="right"><font class="css1" size="1"><?php Web::PrintString($sum['name']); ?></font></td>
+												<?php } ?>
+												<td><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+												<td width="225">
+													<table border="0" cellspacing="0" cellpadding="0" bgcolor="<?php print($sum['color']); ?>">
+														<tr>
+															<td><img src="../img/sp.gif" width="<?php print($width); ?>" height="10" border="0"></td>
+														</tr>
+													</table>
+												</td>
+												<td><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+												<td align="right"><font class="css1" size="1"><?php print(number_format($sum['amount'])); ?>円</font></td>
+											</tr>
+										<?php } ?>
+										<tr>
+											<td colspan="5"><img src="../img/sp.gif" width="1" height="5" border="0"></td>
+										</tr>
+										<tr bgcolor="#000000">
+											<td colspan="5"><img src="../img/sp.gif" width="1" height="1" border="0"></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td><img src="../img/sp.gif" width="5" height="1" border="0"></td>
+											<td align="right" colspan="3"><font class="css2" size="2"><b>合計：<?php print(number_format($total)); ?>円</b></font></td>
+										</tr>
+									</table>
+								</td>
+								<td><img src="../img/sp.gif" width="2" height="1" border="0"></td>
+							</tr>
+							<tr>
+								<td colspan="5"><img src="../img/sp.gif" width="1" height="10" border="0"></td>
+							</tr>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="590" bgcolor="#baba9e">
+							<tr>
+								<td><img src="../img/sp.gif" width="1" height="5" border="0"></td>
+							</tr>
+						</table>
+						<?php foreach ($items as $item) { ?>
+							<?php $sum = 0; ?>
+							<table border="0" cellspacing="0" cellpadding="2" width="590">
+								<tr bgcolor="#718542">
+									<td><font class="css1" size="1" color="#ffffff"><?php print($item->year); ?>年<br><b><?php print($item->month); ?>月<?php print($item->day); ?>日（<?php Web::PrintString($item->weekdayString()); ?>）</b></font></td>
+									<td align="right"><a href="<?php print(Web::ApplicationUrl()); ?>?p=edit_item&amp;a=edit&amp;u=<?php Web::PrintString($user->id); ?>&amp;i=<?php Web::PrintString($item->id); ?>"><img src="../img/hensyu.gif" width="21" height="29" border="0" hspace="5"></a><a href="<?php print(Web::ApplicationUrl()); ?>?p=delete_item&amp;a=confirm&amp;u=<?php Web::PrintString($user->id); ?>&amp;i=<?php Web::PrintString($item->id); ?>&amp;y=<?php print($disp_year); ?>&amp;m=<?php print($disp_month); ?>"><img src="../img/sakujyo.gif" width="21" height="29" border="0" hspace="5"></a></td>
+								</tr>
+								<tr valign="top">
+									<td align="center" bgcolor="#f5f5f5">
+										<img src="../img/sp.gif" width="85" height="5" border="0"><br>
+										<?php if ($item->hasPhoto()) { ?>
+											<a href="JavaScript:openImgWin('<?php print($item->photoUrl()); ?>')"><img src="<?php print($item->photoUrl()); ?>" width="75" border="0"><br>
+											<font class="css1" size="1">拡大表示</font></a>
+										<?php } ?>
+									</td>
+									<td align="right">
+										<table border="0" cellspacing="0" cellpadding="2" width="495">
+											<tr bgcolor="#f5f5f5">
+												<td colspan="2"><font class="css1" size="1"><?php print(nl2br($item->comment)); ?>　</font></td>
+											</tr>
+											<tr>
+												<td colspan="2"><font class="css1" size="1"><b>■ 本日の支出</b></font></td>
+											</tr>
+											<?php $i = 0; foreach ($item->spendings as $spending) { ?>
+												<?php $bgcolor = ($i++ % 2) ? '#f5f5f5' : '#e7e9e1'; ?>
+												<?php $sum += $spending['amount']; ?>
+												<tr>
+													<td align="left" bgcolor="<?php print($bgcolor); ?>"><font class="css1" size="1">・ <?php Web::PrintString($spending['name']); ?><?php if (strlen($spending['place'])) { ?>（<?php Web::PrintString($spending['place']); ?>）<?php } ?><?php if (strlen($spending['comment'])) { ?>（<?php Web::PrintString($spending['comment']); ?>）<?php } ?></font></td>
+													<td align="right" bgcolor="<?php print($bgcolor); ?>"><font class="css1" size="1"><?php print(number_format($spending['amount'])); ?>円</font></td>
+												</tr>
+											<?php } ?>
+										</table>
+										<table border="0" cellspacing="0" cellpadding="0">
+											<tr>
+												<td bgcolor="#718542"><img src="../img/sp.gif" width="495" height="1" border="0"></td>
+											</tr>
+											<tr>
+												<td align="right"><font class="css1" size="1"><b>合計：<?php print(number_format($sum)); ?>円</b></font></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						<?php } ?>
+						<table border="0" cellspacing="0" cellpadding="0" width="590" bgcolor="#baba9e">
+							<tr>
+								<td><img src="../img/sp.gif" width="1" height="5" border="0"></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+	</body>
+</html>
+<?php exit(); ?>

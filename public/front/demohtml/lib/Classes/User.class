@@ -1,0 +1,148 @@
+<script language='php'>
+
+require_once('Classes/Diary.class');
+
+define('DATA_USER_DIR', DATA_BASE_DIR . '/User');
+
+class User {
+
+  var $id;
+  var $password;
+  var $is_admin;
+  var $name;
+  var $is_active;
+  var $comment;
+
+  function User() {
+    $this->id = uniqid('');
+    $this->is_admin = FALSE;
+    $this->is_active = TRUE;
+  }
+
+  function save() {
+    $temp_path = $this->tempPath();
+    if (($fp = fopen($temp_path, 'w', 0))) {
+      $s = serialize($this);
+      $l = strlen($s);
+      if ($l > 0 && fwrite($fp, $s) == $l) {
+	if (fclose($fp)) {
+	  return rename($temp_path, $this->filePath());
+	}
+      }
+    }
+    unlink($temp_path);
+    return FALSE;
+  }
+
+  function delete() {
+    Diary::DeleteDiaryWithUser($this);
+    return unlink($this->filePath());
+  }
+
+  function filePath() {
+    return User::FilePathWithId($this->id);
+  }
+
+  function tempPath() {
+    return User::TempPathWithId($this->id);
+  }
+
+////
+
+  function setPassword($password) {
+    if (strlen($password) > 0) {
+    	$this->password = crypt($password);
+    }
+  }
+
+  function diary() {
+    $d = Diary::DiaryWithUser($this);
+    if ($d) return $d;
+    $d = new Diary($this);
+    if ($d->save()) return $d;
+    $d->delete();
+    return NULL;
+  }
+
+////
+
+  function FilePathWithId($id) {
+    if (!strlen($id)) exit();
+    return DATA_USER_DIR . '/' . $id . '.dat';
+  }
+
+  function TempPathWithId($id) {
+    if (!strlen($id)) exit();
+    return tempnam(DATA_USER_DIR, $id . '.');
+  }
+
+  function UserWithFilePath($file_path, $only_active = TRUE) {
+    if (($fp = @fopen($file_path, 'r', 0))) {
+      while (!feof($fp)) $s .= fread($fp, 1024);
+      fclose($fp);
+      $u = unserialize($s);
+      if ($u) {
+	if (!$only_active || ($only_active && $u->is_active)) return $u;
+      }
+    }
+    return NULL;
+  }
+
+  function UserWithId($id, $only_active = TRUE) {
+    return User::UserWithFilePath(User::FilePathWithId($id), $only_active);
+  }
+
+  function UserWithIdAndPassword($id, $password, $only_active = TRUE) {
+    $u = User::UserWithId($id, $only_active);
+    if ($u) {
+      if (crypt($password, $u->password) == $u->password) {
+	return $u;
+      }
+    }
+    return NULL;
+  }
+
+  function _user_cmp($a, $b) {
+    return ($a->id > $b->id) ? +1 : -1;
+  }
+
+  function Users($only_active = TRUE) {
+    $result = array ();
+    if ($d = opendir(DATA_USER_DIR)) {
+      while (($f = readdir($d)) !== FALSE) {
+	if (strpos($f, '.') === 0) continue;
+	$u = User::UserWithFilePath(DATA_USER_DIR . '/' . $f, $only_active);
+	if ($u) {
+	  $result[] = $u;
+	}
+      }
+      closedir($d);
+    }
+    usort($result, array ('User', '_user_cmp'));
+    return $result;
+  }
+
+  function DeleteUserWithId($id) {
+    $u = User::UserWithId($id, FALSE);
+    if ($u) return $u->delete();
+    return FALSE;
+  }
+
+}
+
+////
+
+$_u = User::UserWithId(DEFAULT_ADMIN_ID, FALSE);
+if (!$_u) {
+  $_u = new User();
+  $_u->id = DEFAULT_ADMIN_ID;
+  $_u->setPassword(DEFAULT_ADMIN_PASSWORD);
+  $_u->is_admin = TRUE;
+  $_u->save();
+} else if (!($_u->is_active)) {
+  $_u->is_active = TRUE;
+  $_u->save();
+}
+unset($_u);
+
+</script>

@@ -1,0 +1,103 @@
+<script language='php'>
+
+require_once('Classes/Item.class');
+
+#define ('DATA_PHOTO_DIR', DATA_BASE_DIR . '/Photo');
+define ('DATA_PHOTO_DIR', APP_BASE_DIR . '/data/Photo');
+#define ('URL_PHOTO_DIR', '/cgi/web_across/data/Photo');
+define ('URL_PHOTO_DIR', '/data/Photo');
+class Photo {
+
+  var $id;
+  var $file;
+  var $suffix;
+
+  function Photo($item) {
+  }
+
+  function save() {
+    if ($this->file && strlen($this->suffix)) {
+      $this->id = uniqid('') . '.' . $this->suffix;
+      $fn = $this->filePath();
+      return move_uploaded_file($this->file['tmp_name'], $fn);
+    }
+    return FALSE;
+  }
+
+  function delete() {
+    return unlink($this->filePath());
+  }
+
+  function filePath() {
+    return Photo::FilePathWithId($this->id);
+  }
+
+  function urlPath() {
+    return Photo::UrlPathWithId($this->id);
+  }
+
+////
+
+  function getSuffix($path) {
+    $a = GetImageSize($path);
+    if (is_array($a)) {
+      switch ($a[2]) {
+	case 1: return 'gif';
+	case 2: return 'jpg';
+	case 3: return 'png';
+      }
+    }
+    return NULL;
+  }
+
+  function setFile($file) {
+    if ($file) {
+      $this->file = $file;
+      if (is_uploaded_file($file['tmp_name'])) {
+	$this->suffix = $this->getSuffix($this->file['tmp_name']);
+	return (strlen($this->suffix));
+      }
+    }
+    return FALSE;
+  }
+
+////
+
+  function FilePathWithId($id) {
+    if (!strlen($id)) exit();
+    return DATA_PHOTO_DIR . '/' . $id;
+  }
+
+  function UrlPathWithId($id) {
+    if (!strlen($id)) exit();
+    return URL_PHOTO_DIR . '/' . $id;
+  }
+
+  function PhotoWithId($id) {
+    if (is_file(Photo::FilePathWithId($id))) {
+      $p = new Photo(NULL);
+      $p->id = $id;
+      return $p;
+    }
+    return NULL;
+  }
+
+  function PhotoWithItem($item) {
+    return Photo::PhotoWithId($item->photo_id);
+  }
+
+  function DeletePhotoWithId($id) {
+    $p = Photo::PhotoWithId($id);
+    if ($p) {
+      return $p->delete();
+    }
+    return TRUE;
+  }
+
+  function DeletePhotoWithItem($item) {
+    return Photo::DeletePhotoWithId($item->photo_id);
+  }
+
+}
+
+</script>
