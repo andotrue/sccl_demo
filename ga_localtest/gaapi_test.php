@@ -14,6 +14,7 @@
 	$profile = '130648215';
 	
 	// Googleクライアントのインスタンスを作成
+	// Googleクライアントのインスタンスを作成
 	$client = new Google_Client();
 	$analytics = new Google_Service_Analytics($client);
 	
